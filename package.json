@@ -11,7 +11,11 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
+    "morgan": "^1.9.1",
     "mysql": "^2.16.0",
-    "syntax-error": "^1.4.0"
+    "mysql2": "^1.6.4",
+    "sequelize": "^4.42.0",
+    "syntax-error": "^1.4.0",
+    "winston": "^3.1.0"
   }
 }

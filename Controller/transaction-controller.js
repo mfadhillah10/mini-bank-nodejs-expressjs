@@ -1,5 +1,6 @@
 var response = require('../Model/res');
 var transactionDao = require('../DAO/transaction-dao');
+var logger = require('../winston-logger');
 
 exports.transactions = function(req, res) {
     transactionDao.getAll(function(error, rows) {
@@ -13,10 +14,13 @@ exports.transactions = function(req, res) {
 };
 
 exports.getTransactionById = function(req, res) {
-    transactionDao.getById(req.params['id'], function(err, rows) {
+    transactionDao.getById(req.params['id'], function(err, data) {
         if (err) {
-            console.log('Error '+err);
-            response.err(err,res);
+            logger.info('Error ' + err);
+            response.err(err, res);
+        } else if (data == null) {
+            logger.error('Error cuy ' + err);
+            response.dataNotFound('Data not found', res);
         }
         response.ok(data, res);
     });

@@ -12,7 +12,7 @@ exports.getById = function getById(id, callback) {
             console.log(error);
             return callback(error);
         }
-        callback(null, rows);
+        callback(null, rows[0]);
     });
 };
 

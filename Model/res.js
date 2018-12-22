@@ -20,8 +20,8 @@ exports.err = function(values, res) {
 
 exports.dataNotFound = function(values, res) {
   var data = {
-    'status':14,
-    'values': (values ? values : 'Data not found')
+    'status':404,
+    'values': values
   };
   res.json(data);
   res.end();
