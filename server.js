@@ -8,6 +8,15 @@ var express = require('express'),
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+var cors = require('cors');
+app.use(cors());
+
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, Accept, Content-Type, X-Requested-With");
+    next();
+});
+
 var logger = require('./winston-logger');
 
 app.use(morgan('combined',{ "stream": logger.stream }));

@@ -1,11 +1,28 @@
 var response = require('../Model/res');
-var transactionDao = require('../DAO/transaction-dao');
+var transactionDao = require('../DAO/transaction-dao-sequelize');
 var logger = require('../winston-logger');
+var util = require('util');
 
 exports.transactions = function(req, res) {
-    transactionDao.getAll(function(error, rows) {
+    let whereClause = {};
+    if(req.query.id) {
+        whereClause.id = req.query.id;
+    }
+    if(req.query.type) {
+        whereClause.type = req.query.type;
+    }
+    if(req.query.amount) {
+        whereClause.amount = req.query.amount;
+    }
+    if(req.query.amountSign) {
+        whereClause.amountSign = req.query.amountSign;
+    }
+    if(req.query.accountNumber) {
+        whereClause.account_number = req.query.accountNumber;
+    }
+    transactionDao.getAll(whereClause, function(error, rows) {
         if (error) {
-            console.log('Error '+error);
+            logger.error('Error '+error);
             response.err(error, res);
         } else {
             response.ok(rows, res);
@@ -27,9 +44,11 @@ exports.getTransactionById = function(req, res) {
 };
 
 exports.insertTransaction = function(req, res) {
+    logger.info('request for insert: ');
+    logger.debug(req.body);
     transactionDao.insert(req.body, function(err, rows) {
         if (err) {
-            console.log('Error ', +err);
+            logger.error('Error ', +err);
             response.err(err, res);
         }
         response.ok(rows, res);
@@ -37,16 +56,18 @@ exports.insertTransaction = function(req, res) {
 };
 
 exports.updateTransaction = function(req, res) {
+    logger.info('request for update: ');
+    logger.debug(req.body);
     transactionDao.getById(req.body.id, function(err, data) {
         if (err) {
-            console.log('Error '+err);
+            logger.error('Error '+err);
             response.err(err, res);
         } else if (data == null) {
             response.dataNotFound('Not found ', res);
         } else {
             transactionDao.update(req.body.id, req.body, function(err, data) {
                 if (err) {
-                    console.log('Error '+err);
+                    logger.error('Error '+err);
                     response.err(err, res);
                 }
                 response.ok('Updated ' + data.message, res);
@@ -56,16 +77,17 @@ exports.updateTransaction = function(req, res) {
 };
 
 exports.del = function(req, res) {
+    logger.info(util.format('deleting transaction id %s', req.params['id']));
     transactionDao.getById(req.params['id'], function(err, data) {
         if (err) {
-            console.log('Error '+err);
+            logger.error('Error '+err);
             response.err(err, res);
         } else if (data == null) {
             response.dataNotFound('Not found ', res);
         } else {
             transactionDao.del(req.params['id'], function(err, data) {
                 if (err) {
-                    console.log('Error '+err);
+                    logger.error('Error '+err);
                     response.err(error, res);
                 }
                 response.ok(data, res);

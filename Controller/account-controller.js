@@ -4,12 +4,26 @@ var logger = require('../winston-logger');
 var util = require('util');
 
 exports.accounts = function(req, res) {
-    accountDao.getAll(function(error, rows) {
+    let whereClause = {};
+    if(req.query.openDate) {
+        whereClause.openDate = req.query.openDate;
+    }
+    if(req.query.accountNumber) {
+        whereClause.accountNumber = req.query.accountNumber;
+    }
+    if(req.query.balance) {
+        whereClause.balance = req.query.balance;
+    }
+    if(req.query.cust_number) {
+        whereClause.cust_number = req.query.cust_number;
+    }
+    accountDao.getAll(whereClause, function(error, rows) {
         if (error) {
             logger.error('Error '+error);
             response.err(error, res);
         } else {
             response.ok(rows, res);
+            // return res.json(rows);
         }
     });
 };

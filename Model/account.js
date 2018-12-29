@@ -8,11 +8,10 @@ module.exports = (sequelize, type) => {
         },
         openDate: {
             field: 'open_date',
-            type: type.DATE
+            type: type.DATE,
         },
         balance: type.DECIMAL,
-        custNumber: {
-            field: 'cust_number',
+        cust_number: {
             type: type.INTEGER,
             onDelete: 'CASCADE',
 

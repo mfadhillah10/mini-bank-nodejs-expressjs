@@ -10,8 +10,9 @@ exports.getById = function getById(id, callback) {
     })
 };
 
-exports.getAll = function getAll(callback) {
+exports.getAll = function getAll(whereClause, callback) {
     Account.findAll({
+        where: whereClause,
         include:[Customer]
     }).then((accounts) => {
         return callback(null, accounts);
@@ -21,13 +22,13 @@ exports.getAll = function getAll(callback) {
     })
 };
 
-exports.insert = function insert(id, callback) {
-    account = data;
+exports.insert = function insert(data, callback) {
+    let account = data;
     if (account.customer == null && account.cust_number == null) {
         res.json('Customer data is empty');
     } else {
         if (account.cust_number == null) {
-            account.cust_number = account.customer.customerNumber;
+            account.cust_number = account.customer.custnumber;
         }
     }
     Account.create(account).then(account => {
@@ -39,12 +40,12 @@ exports.insert = function insert(id, callback) {
 };
 
 exports.update = function update(id, data, callback) {
-    account = data;
+    let account = data;
     if (account.customer == null && account.cust_number == null) {
         res.json('Customer data is empty');
     } else {
         if (account.cust_number == null) {
-            account.cust_number = account.customer.customerNumber;
+            account.cust_number = account.customer.custnumber;
         }
     }
     Account.update(data, {

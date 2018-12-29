@@ -9,7 +9,8 @@ exports.customers = function(req, res) {
             logger.error('Error while selecting data: '+error);
             response.err(error, res);
         } else {
-            response.ok(rows, res)
+            response.ok(rows, res);
+            // return res.json(rows);
         }
     });
 };
@@ -21,6 +22,7 @@ exports.insertCustomer = function(req, res) {
             response.err(err, res);
         }
         response.ok('Success '+ data.customerNumber, res);
+        // return res.json(data.custnumber);
     });
 };
 
@@ -34,25 +36,27 @@ exports.getCustomerById = function(req, res) {
             logger.error('Error cuy ' + err);
         }
         response.ok(data, res);
+        // return res.json(data);
     });
 };
 
 exports.updateCustomer = function(req, res) {
     logger.info('Request for update: ');
     logger.debug(req.body);
-    customerDao.getById(req.body.customerNumber, function(err, data) {
+    customerDao.getById(req.body.custnumber, function(err, data) {
         if (err) {
             logger.error('Error while updating by ID: '+err);
             response.err(err, res);
         } else if (data == null) {
             response.dataNotFound('Customer not found. ', res);
         } else {
-            customerDao.update(req.body.customerNumber, req.body, function(err, data) {
+            customerDao.update(req.body.custnumber, req.body, function(err, data) {
                 if (err) {
                     logger.error('Error while calling by ID: ' +err);
                     response.err(error, res);
                 }
                 response.ok('Data updated: ' + data.customerNumber, res);
+                // return res.json(data.custnumber);
             });
         }
     });
@@ -74,6 +78,7 @@ exports.del = function(req, res) {
                     response.err(error, res);
                 } 
                 response.ok('Success deleted with ID: ' + data, res);
+                // return res.json(data);
             });
         }
     });

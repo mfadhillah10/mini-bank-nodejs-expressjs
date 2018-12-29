@@ -30,7 +30,7 @@ exports.insert = function insert(data, callback) {
 
 exports.update = function update(id, data, callback) {
     Customer.update(data, {
-        where: {customerNumber: data.customerNumber},
+        where: {custnumber: data.custnumber},
         returning: true,
         plain: true
     }).then(result => {
@@ -44,7 +44,7 @@ exports.update = function update(id, data, callback) {
 };
 
 exports.del = function del(id, callback) {
-    Customer.destroy({where: {customerNumber: id}
+    Customer.destroy({where: {custnumber: id}
     }).then(result => {
         logger.info('result update: ');
         logger.info(result);
